@@ -3,7 +3,8 @@
 ## Gameplan
 - [x] Make countdown timer
 - [x] Add Start and Pause functionality
-- [ ] Create input for time
+- [x] Create input for time
+- [x] Create reset for timer
 - [ ] Create inputs for Tabada
   - [ ] # of Sets
   - [ ] # of Exercises per Set
