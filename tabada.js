@@ -23,8 +23,11 @@ button.addEventListener("click", function(event){
 function countdownTimer(){
   // Stop timer at zero
   if (timeleft==0){
-    title.innerHTML = "Done!";
-    clearInterval(myInterval);
+    title.innerHTML = "Done!";  
+    button.innerHTML = "Start";
+    clearInterval(myInterval);  
+    myInterval = -1;
+    timeleft = 5; 
   }
 
   else{
