@@ -3,17 +3,26 @@
 var title = document.getElementById("title");
 var startButton = document.getElementById("start-button");
 var resetButton = document.getElementById("reset-button");
-var timeleft = 5;
+var timeInput = document.getElementById("time-input");
+
+var timeleft = -1;
 var myInterval = -1;
+
 
 startButton.addEventListener("click", function(event){
 
-  // Start Timer
-  if(myInterval == -1){
+  // Get time value
+  if (timeleft == -1){
+    timeleft = timeInput.value;
+  }
+
+  // Start timer
+  if (myInterval == -1){
     startButton.innerHTML = "Pause";
     myInterval = setInterval(countdownTimer, 1000);
   }
 
+  // Pause timer
   else{
     startButton.innerHTML = "Start";
     clearInterval(myInterval);
@@ -51,7 +60,7 @@ function resetTimer(label){
   clearInterval(myInterval);   
   
   // Reset time and display
-  timeleft = 5;                     
+  timeleft = timeInput.value;                     
   title.innerHTML = convertSeconds(timeleft);
 
   // Reset start / pause button
