@@ -1,20 +1,21 @@
 
 // Setup
-var button = document.getElementById("my-button");
 var title = document.getElementById("title");
+var startButton = document.getElementById("start-button");
+var resetButton = document.getElementById("reset-button");
 var timeleft = 5;
 var myInterval = -1;
 
-button.addEventListener("click", function(event){
+startButton.addEventListener("click", function(event){
 
   // Start Timer
   if(myInterval == -1){
-    button.innerHTML = "Pause";
+    startButton.innerHTML = "Pause";
     myInterval = setInterval(countdownTimer, 1000);
   }
 
   else{
-    button.innerHTML = "Start";
+    startButton.innerHTML = "Start";
     clearInterval(myInterval);
     myInterval = -1
   }
@@ -24,10 +25,7 @@ function countdownTimer(){
   // Stop timer at zero
   if (timeleft==0){
     title.innerHTML = "Done!";  
-    button.innerHTML = "Start";
-    clearInterval(myInterval);  
-    myInterval = -1;
-    timeleft = 5; 
+    clearInterval(myInterval);        // stop timer 
   }
 
   else{
@@ -47,6 +45,19 @@ function convertSeconds(s){
   return formattedminutes + ':' + formattedseconds;
 }
 
+
+function resetTimer(label){
+  // Stop timer
+  clearInterval(myInterval);   
+  
+  // Reset time and display
+  timeleft = 5;                     
+  title.innerHTML = convertSeconds(timeleft);
+
+  // Reset start / pause button
+  myInterval = -1;                  
+  startButton.innerHTML = "Start"; 
+}
 
 
 
