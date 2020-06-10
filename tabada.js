@@ -1,19 +1,42 @@
+//-----------------------------------------------------------------------------------------------
+// GLOBAL VARIABLES
+//-----------------------------------------------------------------------------------------------
 
-// Setup
-var title = document.getElementById("title");
+// HTML
+var setsInput = document.getElementById("sets-input");
+var exersisesInput = document.getElementById("exercises-input");
+var workoutInput = document.getElementById("workout-input");
+var exersiseRestInput = document.getElementById("exersiseRest-input");
+var setRestInput = document.getElementById("setRest-input");
+
+var timerDisplay = document.getElementById("timer-display");
+
 var startButton = document.getElementById("start-button");
 var resetButton = document.getElementById("reset-button");
-var timeInput = document.getElementById("time-input");
 
-var timeleft = -1;
+// JavaScript
+var sets = 2;
+var exersises = 3;
+var workout = 5;
+var exersiseRest = 2;
+var setRest = 3;
+
+var totalTime = -1;
 var myInterval = -1;
+var tabadaArray = [];
 
 
+//-----------------------------------------------------------------------------------------------
+// BUTTON FUNCTIONS
+//-----------------------------------------------------------------------------------------------
+
+// Start / Pause Button
 startButton.addEventListener("click", function(event){
 
-  // Get time value
-  if (timeleft == -1){
-    timeleft = timeInput.value;
+  // Set up Tabada Timer
+  if (totalTime == -1){
+    // collectInputs();     // Comment this line for testing without inputs
+    calculateTotalTime();
   }
 
   // Start timer
@@ -30,16 +53,53 @@ startButton.addEventListener("click", function(event){
   }
 });
 
+
+// Reset Button
+resetButton.addEventListener("click", function(event){
+  
+  // Stop Timer
+  clearInterval(myInterval);   
+ 
+  // Refresh Timer Display
+  calculateTotalTime();                
+  timerDisplay.innerHTML = convertSeconds(totalTime);
+
+  // Reset start / pause button
+  myInterval = -1;                  
+  startButton.innerHTML = "Start"; 
+});
+
+
+//-----------------------------------------------------------------------------------------------
+// FUNCTIONS
+//-----------------------------------------------------------------------------------------------
+
+function collectInputs(){
+  sets = parseFloat(setsInput.value);
+  exersises = parseFloat(exersisesInput.value);
+  workout = parseFloat(workoutInput.value);
+  exersiseRest = parseFloat(exersiseRestInput.value);
+  setRest = parseFloat(setRestInput.value);
+}
+
+function calculateTotalTime(){
+  let totalWorkoutTime = workout * exersises * sets;
+  let totalExersiseRest = exersiseRest * (exersises - 1) * sets;
+  let totalSetsRest = setRest * (sets - 1);
+
+  totalTime = totalWorkoutTime + totalExersiseRest + totalSetsRest;
+}
+
 function countdownTimer(){
   // Stop timer at zero
-  if (timeleft==0){
-    title.innerHTML = "Done!";  
+  if (totalTime==0){
+    timerDisplay.innerHTML = "Done!";  
     clearInterval(myInterval);        // stop timer 
   }
 
   else{
-    title.innerHTML = convertSeconds(timeleft);
-    timeleft--;
+    timerDisplay.innerHTML = convertSeconds(totalTime);
+    totalTime--;
   }
 }
 
@@ -55,18 +115,10 @@ function convertSeconds(s){
 }
 
 
-function resetTimer(label){
-  // Stop timer
-  clearInterval(myInterval);   
-  
-  // Reset time and display
-  timeleft = timeInput.value;                     
-  title.innerHTML = convertSeconds(timeleft);
 
-  // Reset start / pause button
-  myInterval = -1;                  
-  startButton.innerHTML = "Start"; 
-}
+
+
+
 
 
 

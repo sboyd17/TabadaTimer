@@ -9,16 +9,34 @@
 
 <body>
 <!-- Inputs -->
-  <label for="time-input">Time (in seconds): </label>
-  <input type="number" id="time-input" min="1" max="3600">
+  <p>
+    <label for="sets-input">Number of Sets: </label>
+    <input type="number" id="sets-input" min="1" max="3600">
+  </p>
+  <p>
+    <label for="exercises-input">Number of Exersizes per Set: </label>
+    <input type="number" id="exercises-input" min="1" max="3600">
+  </p>
+  <p>
+    <label for="workout-input">Exersise Time:  </label>
+    <input type="number" id="workout-input" min="1" max="3600">
+  </p>
+  <p>
+    <label for="exersiseRest-input">Rest between exersises: </label>
+    <input type="number" id="exersiseRest-input" min="1" max="3600">
+  </p>
+  <p>
+    <label for="setRest-input">Rest between Sets: </label>
+    <input type="number" id="setRest-input" min="1" max="3600">
+  </p>
 
 <!-- Timer Display  -->
-  <h1 id="title">???</h1>
+  <h1 id="timer-display">???</h1>
 
 <!-- Buttons -->
   <p>
     <button id="start-button">Start</button>
-    <button id="reset-button" onclick="resetTimer()">Reset</button>
+    <button id="reset-button">Reset</button>
   </p>
 
   <script src="tabada.js"></script>
