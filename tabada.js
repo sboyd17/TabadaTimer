@@ -12,7 +12,7 @@ var setRestInput = document.getElementById("setRest-input");
 var timerDisplay = document.getElementById("timer-display");
 var setDisplay = document.getElementById("set-display");
 var labelDisplay = document.getElementById("label-display");
-var sectionTimerDisplay = document.getElementById("sectionTimer-display");
+var labelTimerDisplay = document.getElementById("labelTimer-display");
 
 var startButton = document.getElementById("start-button");
 var resetButton = document.getElementById("reset-button");
@@ -39,7 +39,7 @@ startButton.addEventListener("click", function(event){
 
   // Set up Tabada Timer
   if (totalTime == -1){
-    // collectInputs();     // Comment this line for testing without inputs
+    collectInputs();        // Comment this line for testing without inputs
     calculateTotalTime();
     createTabadaArray();
   }
@@ -47,7 +47,7 @@ startButton.addEventListener("click", function(event){
   // Start timer
   if (myInterval == -1){
     startButton.innerHTML = "Pause";
-    myInterval = setInterval(countdownTimer, 1000);
+    myInterval = setInterval(tabadaTimer, 1000);
   }
 
   // Pause timer
@@ -66,12 +66,9 @@ resetButton.addEventListener("click", function(event){
   clearInterval(myInterval);   
  
   // Refresh Timer Display
-  calculateTotalTime();                
-  timerDisplay.innerHTML = convertSeconds(totalTime);
-  setDisplay.innerHTML = 1;
-  labelDisplay.innerHTML = 'Workout';
-  sectionTimerDisplay.innerHTML = convertSeconds(workout);
-  totalTime=-1;
+  calculateTotalTime(); 
+  updateOutputs(totalTime, 1, 'Workout', workout);               
+  totalTime=-1;  // Alows user to change input values before clicking start button.
 
   // Reset start / pause button
   myInterval = -1;                  
@@ -80,7 +77,7 @@ resetButton.addEventListener("click", function(event){
 
 
 //-----------------------------------------------------------------------------------------------
-// FUNCTIONS
+// SETUP FOR TABADA TIMER
 //-----------------------------------------------------------------------------------------------
 
 function collectInputs(){
@@ -91,7 +88,6 @@ function collectInputs(){
   setRest = parseFloat(setRestInput.value);
 }
 
-
 function calculateTotalTime(){
   let totalWorkoutTime = workout * exersises * sets;
   let totalExersiseRest = exersiseRest * (exersises - 1) * sets;
@@ -100,9 +96,8 @@ function calculateTotalTime(){
   totalTime = totalWorkoutTime + totalExersiseRest + totalSetsRest;
 }
 
-
 function createTabadaArray() {
-  tabadaIndex = 0;
+  tabadaIndex = 0;    // Global variable used for tabada timer
 
   for( let set=1; set<=sets; set++ ){
     for( let exersise=1; exersise<=exersises; exersise++){
@@ -121,45 +116,57 @@ function createTabadaArray() {
       }
       
       // Done
-      else{break;}
+      else{break;}   // Very end exersize has no rest, so we must break the loop.
     }
   }
 }
 
-function addTimeBlock(set, label, time) {
-  for (let i=time; i>0; i--) {
+function addTimeBlock(set, label, labelTime) {
+
+  // Add a sub timer to the array (workout, exersice rest, or set rest)
+  for (let i=labelTime; i>0; i--) {
     tabadaArray.push({
+      "totalTimeRemaining" : totalTime--,
       "set" : set,
       "label" : label,
-      "timeRemaing" : i,
-      "totalTimeRemaining" : totalTime--,
+      "labelTimeRemaining" : i,
     });
   }
 }
 
+//-----------------------------------------------------------------------------------------------
+// TABADA TIMER
+//-----------------------------------------------------------------------------------------------
 
-function countdownTimer(){
+function tabadaTimer(){
   
+  // Still time left
   if (tabadaIndex < tabadaArray.length){
     let displayInfo = tabadaArray[tabadaIndex];
-    timerDisplay.innerHTML = convertSeconds(displayInfo.totalTimeRemaining);
-    setDisplay.innerHTML = displayInfo.set;
-    labelDisplay.innerHTML = displayInfo.label;
-    sectionTimerDisplay.innerHTML = convertSeconds(displayInfo.timeRemaing);
+    updateOutputs(  displayInfo.totalTimeRemaining, 
+                    displayInfo.set,
+                    displayInfo.label,
+                    displayInfo.labelTimeRemaining );
     tabadaIndex++;
   }
 
+  // End of tabada timer
   else{
-    timerDisplay.innerHTML = convertSeconds(0);
-    labelDisplay.innerHTML = 'Rest';
-    sectionTimerDisplay.innerHTML = convertSeconds(0);
-
+    updateOutputs(0, 1, 'Rest', 0);
     clearInterval(myInterval);        // stop timer 
   }
 }
 
+function updateOutputs(totalTimeRemaining, setNumber, label, labelTimeRemaining){
+  timerDisplay.innerHTML = convertSeconds(totalTimeRemaining);
+  setDisplay.innerHTML = setNumber;
+  labelDisplay.innerHTML = label;
+  labelTimerDisplay.innerHTML = convertSeconds(labelTimeRemaining);
+}
 
 function convertSeconds(s){
+  // Seconds -> mm:ss format 
+
   // Calculate
   let minutes = Math.floor(s/60);
   let seconds = s%60;
@@ -169,12 +176,4 @@ function convertSeconds(s){
   let formattedseconds = ("0" + seconds).slice(-2);
   return formattedminutes + ':' + formattedseconds;
 }
-
-
-
-
-
-
-
-
 

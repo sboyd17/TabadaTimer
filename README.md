@@ -13,5 +13,6 @@
   - [x] Rest time between Sets
 - [x] Calculate total for timer and start timer
 - [x] Create array for the timer?
-- [ ] Use the tabada array for the time
-- [ ] Clean up HTML
+- [x] Use the tabada array for the time
+- [x] Clean up HTML
+- [x] Clean up JavaScript
