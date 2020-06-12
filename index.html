@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+<style>
+  td, th {
+    text-align: left;
+    padding: 8px;
+  } 
+</style>
 
 
 <head>
@@ -9,6 +15,7 @@
 
 <body>
 <!-- Inputs -->
+<h2>Inputs</h2>
   <p>
     <label for="sets-input">Number of Sets: </label>
     <input type="number" id="sets-input" min="1" max="3600">
@@ -30,14 +37,33 @@
     <input type="number" id="setRest-input" min="1" max="3600">
   </p>
 
-<!-- Timer Display  -->
-  <h1 id="timer-display">???</h1>
-
 <!-- Buttons -->
-  <p>
-    <button id="start-button">Start</button>
-    <button id="reset-button">Reset</button>
-  </p>
+<p>
+  <button id="start-button">Start</button>
+  <button id="reset-button">Reset</button>
+</p>
+
+
+<!-- Timer Display  -->
+  <h2>Outputs:</h2>
+  <table>
+    <tr>
+      <th>Total Time Remaining: </th>
+      <td id="timer-display">???</td>
+    </tr> 
+    <tr>
+      <th>Set Number: </th>
+      <td id="set-display">???</td>
+    </tr> 
+    <tr>
+      <th id="label-display">???</th>
+      <td id="sectionTimer-display">???</td>
+    </tr> 
+    
+  </table>
+
+
+
 
   <script src="tabada.js"></script>
 </body>

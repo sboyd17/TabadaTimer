@@ -10,6 +10,9 @@ var exersiseRestInput = document.getElementById("exersiseRest-input");
 var setRestInput = document.getElementById("setRest-input");
 
 var timerDisplay = document.getElementById("timer-display");
+var setDisplay = document.getElementById("set-display");
+var labelDisplay = document.getElementById("label-display");
+var sectionTimerDisplay = document.getElementById("sectionTimer-display");
 
 var startButton = document.getElementById("start-button");
 var resetButton = document.getElementById("reset-button");
@@ -24,6 +27,7 @@ var setRest = 3;
 var totalTime = -1;
 var myInterval = -1;
 var tabadaArray = [];
+var tabadaIndex = 0;
 
 
 //-----------------------------------------------------------------------------------------------
@@ -37,6 +41,7 @@ startButton.addEventListener("click", function(event){
   if (totalTime == -1){
     // collectInputs();     // Comment this line for testing without inputs
     calculateTotalTime();
+    createTabadaArray();
   }
 
   // Start timer
@@ -63,6 +68,10 @@ resetButton.addEventListener("click", function(event){
   // Refresh Timer Display
   calculateTotalTime();                
   timerDisplay.innerHTML = convertSeconds(totalTime);
+  setDisplay.innerHTML = 1;
+  labelDisplay.innerHTML = 'Workout';
+  sectionTimerDisplay.innerHTML = convertSeconds(workout);
+  totalTime=-1;
 
   // Reset start / pause button
   myInterval = -1;                  
@@ -82,6 +91,7 @@ function collectInputs(){
   setRest = parseFloat(setRestInput.value);
 }
 
+
 function calculateTotalTime(){
   let totalWorkoutTime = workout * exersises * sets;
   let totalExersiseRest = exersiseRest * (exersises - 1) * sets;
@@ -90,18 +100,64 @@ function calculateTotalTime(){
   totalTime = totalWorkoutTime + totalExersiseRest + totalSetsRest;
 }
 
+
+function createTabadaArray() {
+  tabadaIndex = 0;
+
+  for( let set=1; set<=sets; set++ ){
+    for( let exersise=1; exersise<=exersises; exersise++){
+
+      // Workout
+      addTimeBlock(set, 'Workout', workout);
+
+      // Exersise Rest
+      if ( exersise < exersises){
+        addTimeBlock(set, 'Rest', exersiseRest);
+      }
+
+      // Set Rest
+      else if( set < sets){
+        addTimeBlock(set, 'Rest', setRest);
+      }
+      
+      // Done
+      else{break;}
+    }
+  }
+}
+
+function addTimeBlock(set, label, time) {
+  for (let i=time; i>0; i--) {
+    tabadaArray.push({
+      "set" : set,
+      "label" : label,
+      "timeRemaing" : i,
+      "totalTimeRemaining" : totalTime--,
+    });
+  }
+}
+
+
 function countdownTimer(){
-  // Stop timer at zero
-  if (totalTime==0){
-    timerDisplay.innerHTML = "Done!";  
-    clearInterval(myInterval);        // stop timer 
+  
+  if (tabadaIndex < tabadaArray.length){
+    let displayInfo = tabadaArray[tabadaIndex];
+    timerDisplay.innerHTML = convertSeconds(displayInfo.totalTimeRemaining);
+    setDisplay.innerHTML = displayInfo.set;
+    labelDisplay.innerHTML = displayInfo.label;
+    sectionTimerDisplay.innerHTML = convertSeconds(displayInfo.timeRemaing);
+    tabadaIndex++;
   }
 
   else{
-    timerDisplay.innerHTML = convertSeconds(totalTime);
-    totalTime--;
+    timerDisplay.innerHTML = convertSeconds(0);
+    labelDisplay.innerHTML = 'Rest';
+    sectionTimerDisplay.innerHTML = convertSeconds(0);
+
+    clearInterval(myInterval);        // stop timer 
   }
 }
+
 
 function convertSeconds(s){
   // Calculate
