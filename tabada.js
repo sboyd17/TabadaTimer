@@ -39,7 +39,7 @@ startButton.addEventListener("click", function(event){
 
   // Set up Tabada Timer
   if (totalTime == -1){
-    collectInputs();        // Comment this line for testing without inputs
+    // collectInputs();        // Comment this line for testing without inputs
     calculateTotalTime();
     createTabadaArray();
   }
@@ -98,7 +98,8 @@ function calculateTotalTime(){
 
 function createTabadaArray() {
   tabadaIndex = 0;    // Global variable used for tabada timer
-
+  tabadaArray = [];
+  
   for( let set=1; set<=sets; set++ ){
     for( let exersise=1; exersise<=exersises; exersise++){
 
@@ -139,7 +140,8 @@ function addTimeBlock(set, label, labelTime) {
 //-----------------------------------------------------------------------------------------------
 
 function tabadaTimer(){
-  
+  console.log('tabadaIndex ', tabadaIndex);
+  console.log('length ', tabadaArray.length);
   // Still time left
   if (tabadaIndex < tabadaArray.length){
     let displayInfo = tabadaArray[tabadaIndex];
@@ -152,8 +154,9 @@ function tabadaTimer(){
 
   // End of tabada timer
   else{
-    updateOutputs(0, 1, 'Rest', 0);
     clearInterval(myInterval);        // stop timer 
+    updateOutputs(0, 1, 'Rest', 0);
+    totalTime = -1
   }
 }
 
